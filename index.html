@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>Mileage Master</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    </head>
+    <body>
+        <div class='container-fluid'>
+            <div class='row'>
+                <div class='col-md-6'>
+                    <h1>Your Mileage Master</h1>
+                    <form role='form'>
+                        <div class='form-group'>
+                            <label for="total">What number do you need to add up to?</label>
+                            <input name="total" type="number" class='form-control'>
+                        </div>
+                        <div class="form-group">
+                            <label for="listlength">How many figures do you need?</label>
+                            <input name="listlength" type="number" class='form-control'>
+                            <label for="variance">How much variation do you want?</label>
+                            <input name="variance" type="range" min="1" max="100" class='form-control'>
+                        </div>
+                    </form>
+                </div>
+                <div id="calcdata" class='col-md-6'>
+                    <h2>Nice Information</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="numberlist" ></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+            var target = 2000;
+            var totalItems = 50;
+            var currentSum = 0;
+            var theList = new Array();
+            var meanValue = target / totalItems;
+            var variance = meanValue * 45 / 100;//Replace45 with value from form above
+            for (var i = 0; i < totalItems; i++) {
+                var addOrSub = Math.random();
+                var varyBy =  Math.random() * variance;
+
+                if (addOrSub < .5) {
+                    nextValue = meanValue + varyBy;
+                } else {
+                    nextValue = meanValue - varyBy;
+                }
+
+                if ((currentSum + nextValue) > target) {
+                    nextValue = target - currentSum;
+                }
+                
+                nextValue = Math.round(nextValue);
+
+                theList.push(nextValue);
+                currentSum = currentSum + nextValue;
+            }
+            
+            function addListItemToList(listItem){
+                $("<tr><td>"+listItem+"</tr></td>").appendTo("#numberlist");                
+            }
+            theList.forEach(addListItemToList);
+            $("<p>The Total For these Numbers is:"+currentSum+"</p>").appendTo("#calcdata");
+        </script>
+    </body>
+</html>
